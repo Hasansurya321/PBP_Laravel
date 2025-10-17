@@ -16,14 +16,12 @@ use App\Http\Controllers\Admin\AdminCheckoutController;
 // ---------------- Redirect ke Dashboard (opsional) ----------------
 Route::get('/', fn () => redirect('/dashboard'));
 
+// ---------------- Dashboard (user) ----------------
+Route::middleware(['auth'])->get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 // ---------------- Public ----------------
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-
-// ---------------- Dashboard (user) ----------------
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-});
 
 // ---------------- Profile ----------------
 Route::middleware('auth')->group(function () {
@@ -72,7 +70,6 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
         Route::delete('/{product}', [AdminProductController::class, 'destroy'])->name('admin.products.destroy');
     });
 
-
     // Orders
     Route::prefix('orders')->group(function () {
         Route::get('/', [AdminCheckoutController::class, 'orders'])->name('admin.orders.index');
@@ -82,5 +79,5 @@ Route::prefix('admin')->middleware(['auth', 'admin'])->group(function () {
     });
 });
 
-// ---------------- Auth scaffolding (Breeze/Fortify/Jetstream) ----------------
+// ---------------- Auth scaffolding ----------------
 require __DIR__ . '/auth.php';

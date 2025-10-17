@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Buat atau perbarui user default
+        User::updateOrCreate(
+            ['email' => 'test@example.com'], // kunci unik
+            [
+                'name'              => 'Test User',
+                'password'          => Hash::make('password'), // ubah jika perlu
+                'email_verified_at' => now(),
+            ]
+        );
     }
 }
